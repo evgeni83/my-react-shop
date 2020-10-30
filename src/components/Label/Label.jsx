@@ -1,5 +1,5 @@
 import React from 'react';
-import './label.css';
+import style from './label.module.css';
 
 const Label = props => {
     const regPrice = parseInt( props.regularPrice );
@@ -8,7 +8,7 @@ const Label = props => {
     const percent = ( diff * 100 / regPrice ).toFixed();
 
     return (
-        <div className="product-card__label">-{ percent }%</div>
+        <div className={style.label}>-{ percent }%</div>
     );
 };
 

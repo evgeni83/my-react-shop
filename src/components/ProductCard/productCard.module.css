@@ -1,4 +1,4 @@
-.product-card {
+.card {
     width: 25%;
     position: relative;
     padding: 20px;
@@ -7,16 +7,16 @@
     transition: box-shadow 0.2s;
 }
 
-.product-card:hover {
+.card:hover {
     box-shadow: 0 0 20px -10px darkgreen;
 }
 
-.product-card__link {
+.link {
     text-decoration: none;
     color: darkslateblue;
 }
 
-.product-card__image {
+.image {
     width: 100%;
     height: 100%;
     object-fit: contain;
