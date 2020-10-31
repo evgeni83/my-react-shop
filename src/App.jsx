@@ -1,61 +1,61 @@
 import React from 'react';
-import { Route } from "react-router-dom";
-import './App.css';
-import ContentSingleProduct from './components/ContentSingleProduct/ContemtSingleProduct';
-import ProductCard from './components/ProductCard/ProductCard';
+import style from './app.module.css';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
 
 class App extends React.Component {
 
     constructor( props ) {
         super( props );
         this.state = {
-            data: []
+            products: [],
+            menu: []
         };
     }
 
-    componentDidMount() {
-        console.log( 'sending request' );
-        return fetch( 'https://my-react-shop.loc/wp-json/wc/v2/products?consumer_key=ck_e0813c7c600712e4d8bf5b3dd710a6d4025b704c&consumer_secret=cs_264c5c98e15639ecb77f116296498f4d1e9cda2d' )
+    getProducts() {
+        fetch( 'https://my-react-shop.loc/wp-json/wc/v2/products?consumer_key=ck_e0813c7c600712e4d8bf5b3dd710a6d4025b704c&consumer_secret=cs_264c5c98e15639ecb77f116296498f4d1e9cda2d' )
             //     'consumer_key': 'ck_e0813c7c600712e4d8bf5b3dd710a6d4025b704c',
             //     'consumer_secret': 'cs_264c5c98e15639ecb77f116296498f4d1e9cda2d'
             .then( response => response.json() )
             .then( respJson => {
                 this.setState( {
-                    data: respJson,
+                    products: respJson,
                 } );
-                console.dir( this.state.data );
-                // this.state.data.forEach( item => {
-                //     console.log(item.on_sale);
-                // })
+                console.dir( this.state.products );
             } )
             .catch( error => {
                 console.error( error );
             } );
     }
 
+    getMenuItems() {
+        fetch( 'https://my-react-shop.loc/wp-json/wp/v2/menu' )
+            .then( response => response.json() )
+            .then( respJson => {
+                this.setState( {
+                    menu: respJson,
+                } );
+                console.dir( this.state.menu );
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+    }
+
+    componentDidMount() {
+        this.getProducts();
+        this.getMenuItems();
+    }
+
 
     render() {
         return (
-                <div className="App">
-                    <Route exact path='/'>
-                        <main className="main">
-                            <div className="products">
-                                { this.state.data.map( item => {
-                                    return <ProductCard item={ item } key={ item.id }/>;
-                                } ) }
-                            </div>
-                        </main>
-                    </Route>
+            <div className={style.app}>
+                <Header menu={ this.state.menu }/>
+                <Main products={ this.state.products }/>
 
-                    { this.state.data.map( item => {
-                        const url = new URL(item.permalink);
-                        return (
-                            <Route path={url.pathname} key={ item.id }>
-                                <ContentSingleProduct item={ item } />
-                            </Route>
-                        )
-                    } ) }
-                </div>
+            </div>
         );
     }
 }
